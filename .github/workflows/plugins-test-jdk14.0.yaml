@@ -14,21 +14,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: PluginsJDK14Test
+name: PluginsTest
 
 on:
   pull_request:
-  push:
-    branches:
-      - master
-    tags:
-      - 'v*'
+    paths:
+      - '.github/workflows/plugins-test*.yaml'
+      - 'apm-application-toolkit/**'
+      - 'apm-commons/**'
+      - 'apm-protocol/**'
+      - 'apm-sniffer/**'
+      - 'test/plugin/**'
+      - '!**/*.md'
+      - '!**/src/test'
 
 jobs:
   PluginsJDK14Test:
     name: jdk14
     runs-on: ubuntu-18.04
-    timeout-minutes: 90
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v2
         with:
@@ -43,7 +47,7 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 14
-      - name: jdk14-with-gson-scenario (1)
+      - name: jdk14-with-gson-scenario
         run: bash test/plugin/run.sh --image_version=jdk14-1.0.0 jdk14-with-gson-scenario
       - name: Report Coverage
         run: bash -x tools/coverage/report.sh
