@@ -19,7 +19,8 @@ name: Build Docker Images
 on:
   workflow_run:
     workflows: ["Build Binary Tar"]
-    types: ["completed"]
+    types:
+      - completed
 
 env:
   SKIP_TEST: true
