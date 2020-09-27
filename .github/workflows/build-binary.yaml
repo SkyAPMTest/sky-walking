@@ -14,37 +14,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: E2E
+name: Build Binary Tar
 
 on:
   pull_request:
   push:
-    branches:
-      - master
-    tags:
-      - 'v*'
-
-env:
-  SKIP_TEST: true
-  SW_AGENT_JDK_VERSION: 8
 
 jobs:
-  GOAgent:
-    name: GO2SKY
-    runs-on: ubuntu-latest
-    timeout-minutes: 90
+  build-binary-tar:
+    runs-on: ubuntu-16.04
+    timeout-minutes: 30
+    name: Build Binary Tar
     steps:
-      - uses: actions/checkout@v2
+      - name: Check Out Source Codes
+        uses: actions/checkout@v2
         with:
           submodules: true
-      - name: Compile and Build
-        run: make docker
-      - name: Copy dist package
-        run: cp -R dist test/e2e/
-      - name: GO2SKY
-        run: ./mvnw --batch-mode -f test/e2e/pom.xml -am -DfailIfNoTests=false verify -Dit.test=org.apache.skywalking.e2e.GOE2E
-      - uses: actions/upload-artifact@v1
-        if: failure()
+      - name: Build Binary Tar
+        run: ./mvnw --batch-mode -DskipTests -Dcheckstyle.skip -Drat.skip package
+      - name: Upload Binary Tar
+        uses: actions/upload-artifact@v2
         with:
-          name: logs
-          path: logs
+          name: apache-skywalking-dist-${{ github.sha }}.tar.gz
+          path: dist/apache-skywalking-*.tar.gz

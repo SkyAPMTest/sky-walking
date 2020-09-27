@@ -17,8 +17,6 @@
 
 set -e
 
-#free -lh
-
 # The script for bookinfo Application to deploy
 BOOKINFO_VERSION="1.3"
 kubectl label namespace default istio-injection=enabled
