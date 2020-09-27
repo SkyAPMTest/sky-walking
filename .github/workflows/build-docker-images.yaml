@@ -40,7 +40,10 @@ jobs:
           workflow: build-binary.yaml
           pr: ${{ github.event.pull_request.number }}
           commit: ${{ github.event.pull_request.head.sha }}
-      - run: ls -alh
+      - run: |
+          echo toJson(${{ github.event }})
+          ls -alh
+          tar -zxvf *.tar.gz
   build-docker-images:
     runs-on: ubuntu-16.04
     timeout-minutes: 60
