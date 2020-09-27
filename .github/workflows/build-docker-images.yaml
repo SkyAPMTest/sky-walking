@@ -17,8 +17,9 @@
 name: Build Docker Images
 
 on:
-  pull_request:
-  push:
+  workflow_run:
+    workflows: ["Build Binary Tar"]
+    types: ["completed"]
 
 env:
   SKIP_TEST: true
