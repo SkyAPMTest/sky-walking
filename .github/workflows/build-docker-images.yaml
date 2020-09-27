@@ -26,6 +26,11 @@ env:
   SKIP_TEST: true
 
 jobs:
+  fast-fail:
+    runs-on: ubuntu-16.04
+    steps:
+      - if: ${{ github.event.workflow_run.conclusion != 'success' }}
+        run: exit 1
   download-binary-tar:
     runs-on: ubuntu-16.04
     timeout-minutes: 60
